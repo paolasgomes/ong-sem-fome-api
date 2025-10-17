@@ -5,7 +5,7 @@ import { authSchema } from '../schemas/auth';
 
 /**
  * @swagger
- * /auth/login:
+ * /auth:
  *   post:
  *     summary: Authenticate user and generate JWT token
  *     tags: [Authentication]
