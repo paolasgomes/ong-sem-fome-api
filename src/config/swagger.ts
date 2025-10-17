@@ -25,9 +25,35 @@ const options: swaggerJsdoc.Options = {
           bearerFormat: 'JWT',
         },
       },
+      schemas: {
+        Donor: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer' },
+            type: {
+              type: 'string',
+              enum: ['pessoa_fisica', 'pessoa_juridica'],
+            },
+            name: { type: 'string' },
+            email: { type: 'string' },
+            phone: { type: 'string' },
+            cpf: { type: 'string' },
+            street_number: { type: 'string' },
+            street_complement: { type: 'string' },
+            street_neighborhood: { type: 'string' },
+            city: { type: 'string' },
+            state: { type: 'string' },
+            zip_code: { type: 'string' },
+            street_address: { type: 'string' },
+            observation: { type: 'string' },
+            created_at: { type: 'string', format: 'date-time' },
+            updated_at: { type: 'string', format: 'date-time' },
+          },
+        },
+      },
     },
   },
-  apis: ['./src/modules/**/routes.ts', './src/modules/**/controllers/*.ts'],
+  apis: ['./src/modules/**/routes/*.ts', './src/modules/**/controllers/*.ts'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
