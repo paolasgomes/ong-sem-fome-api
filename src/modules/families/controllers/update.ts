@@ -185,7 +185,12 @@ const updateFamily = async (req: Request, res: Response) => {
 
     const family = await db('families').where({ id }).first();
 
-    return res.status(200).json(family);
+    const formattedFamily = {
+      ...family,
+      is_active: family.is_active === 1,
+    };
+
+    return res.status(200).json(formattedFamily);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao atualizar família' });
   }
