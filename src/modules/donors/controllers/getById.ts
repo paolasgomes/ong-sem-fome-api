@@ -7,6 +7,8 @@ import { Request, Response } from 'express';
  *   get:
  *     summary: Busca um doador pelo ID
  *     tags: [Donors]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -23,6 +25,8 @@ import { Request, Response } from 'express';
  *               $ref: '#/components/schemas/Donor'
  *       404:
  *         description: Doador não encontrado
+ *       401:
+ *         description: Token ausente ou inválido
  *       500:
  *         description: Erro interno do servidor
  */

@@ -1,28 +1,41 @@
-import { Request, Response } from 'express';
-import { IAuthPayload } from '../types';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-const verifyToken = (req: Request, res: Response): Response => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-
-    if (!token) {
-      return res.status(401).json({
-        error: 'Token não fornecido',
-      });
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: string;
     }
+  }
+}
 
-    const secret = process.env.JWT_SECRET || 'your-secret-key';
-    const decoded = jwt.verify(token, secret) as IAuthPayload;
+interface JwtPayload {
+  userId: string;
+  iat?: number;
+  exp?: number;
+}
 
-    return res.status(200).json({
-      message: 'Token válido',
-      user: decoded,
-    });
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.header('Authorization');
+
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Acesso negado ' });
+  }
+
+  const token = authHeader.startsWith('Bearer ')
+    ? authHeader.substring(7)
+    : authHeader;
+
+  try {
+    const secret = process.env.JWT_SECRET || 'secret-key';
+    const decoded = jwt.verify(token, secret) as JwtPayload;
+
+    req.userId = decoded.userId;
+
+    next();
   } catch (error) {
-    return res.status(401).json({
-      error: 'Token inválido ou expirado',
-    });
+    console.error('❌ Erro na verificação do token:', error);
+    res.status(401).json({ error: 'Token inválido' });
   }
 };
 

@@ -8,6 +8,8 @@ import { createDonorSchema } from '../schemas/create';
  *   put:
  *     summary: Atualiza um doador pelo ID
  *     tags: [Donors]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -68,8 +70,12 @@ import { createDonorSchema } from '../schemas/create';
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Donor'
+ *       400:
+ *         description: Já existe um doador com este CPF ou email ou dados inválidos
  *       404:
  *         description: Doador não encontrado
+ *       401:
+ *         description: Token ausente ou inválido
  *       500:
  *         description: Erro interno do servidor
  */

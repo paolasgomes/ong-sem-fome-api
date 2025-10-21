@@ -8,6 +8,8 @@ import { createDonorSchema } from '../schemas/create';
  *   post:
  *     summary: Cria um novo doador
  *     tags: [Donors]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -77,6 +79,8 @@ import { createDonorSchema } from '../schemas/create';
  *               $ref: '#/components/schemas/Donor'
  *       400:
  *         description: Dados inválidos ou duplicados
+ *       401:
+ *         description: Token ausente ou inválido
  *       500:
  *         description: Erro interno do servidor
  */

@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { IAuthPayload, ILoginRequest } from '../types';
+import { db } from '@/database/connection';
 import { authSchema } from '../schemas/auth';
 
 /**
  * @swagger
- * /auth:
+ * /auth/login:
  *   post:
- *     summary: Authenticate user and generate JWT token
+ *     summary: Autentica o usuário e gera um token JWT
  *     tags: [Authentication]
  *     requestBody:
  *       required: true
@@ -29,7 +30,7 @@ import { authSchema } from '../schemas/auth';
  *                 example: admin123
  *     responses:
  *       200:
- *         description: Authentication successful
+ *         description: Autenticação realizada com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -41,49 +42,66 @@ import { authSchema } from '../schemas/auth';
  *                 user:
  *                   type: object
  *                   properties:
+ *                     id:
+ *                       type: integer
  *                     email:
  *                       type: string
- *                       example: admin@ongsemfome.com
+ *                     role:
+ *                       type: string
+ *                     created_at:
+ *                       type: string
+ *                       format: date-time
+ *                     updated_at:
+ *                       type: string
+ *                       format: date-time
  *       400:
- *         description: Invalid data
+ *         description: Dados inválidos
+ *       401:
+ *         description: Email e/ou senha incorretos
+ *       404:
+ *         description: Email e/ou senha incorretos
  *       500:
- *         description: Internal server error
+ *         description: Erro interno do servidor
  */
-const login = async (req: Request, res: Response): Promise<Response> => {
+
+const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const validation = authSchema.safeParse(req.body);
+  if (!validation.success) {
+    return res.status(400).json({
+      error: 'Dados inválidos.',
+      details: validation.error._zod,
+    });
+  }
+
   try {
-    const { email, password }: ILoginRequest = req.body;
+    const user = await db('users').select('*').where({ email }).first();
 
-    const validationResult = authSchema.safeParse({ email, password });
-
-    if (!validationResult.success) {
-      return res.status(400).json({
-        error: 'Dados inválidos',
-        details: validationResult.error,
-      });
+    if (!user) {
+      return res.status(404).json({ error: 'Email e/ou senha incorretos' });
     }
 
-    const payload: IAuthPayload = {
-      userId: 'user-id',
-      email,
-    };
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
-    const secret = process.env.JWT_SECRET || 'token';
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Email e/ou senha incorretos' });
+    }
 
-    const token = jwt.sign(payload, secret, {
-      expiresIn: '24h',
+    const token = jwt.sign({ userId: user.id }, 'secret-key', {
+      expiresIn: '1h',
     });
 
-    return res.status(200).json({
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.status(200).json({
+      user: userWithoutPassword,
       token,
-      user: {
-        email: payload.email,
-      },
     });
   } catch (error) {
-    console.error('Erro na autenticação:', error);
-    return res.status(500).json({
-      error: 'Erro interno do servidor',
-    });
+    console.error('Login error:', error);
+
+    res.status(500).json({ error: 'Erro interno do servidor.' });
   }
 };
 

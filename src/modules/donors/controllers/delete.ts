@@ -7,6 +7,8 @@ import { Request, Response } from 'express';
  *   delete:
  *     summary: Remove um doador pelo ID
  *     tags: [Donors]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -17,6 +19,8 @@ import { Request, Response } from 'express';
  *     responses:
  *       204:
  *         description: Doador removido com sucesso
+ *       401:
+ *         description: Token ausente ou inválido
  *       404:
  *         description: Doador não encontrado
  *       500:

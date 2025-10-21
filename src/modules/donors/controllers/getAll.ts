@@ -7,6 +7,8 @@ import { Request, Response } from 'express';
  *   get:
  *     summary: Lista todos os doadores com paginação
  *     tags: [Donors]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -31,42 +33,7 @@ import { Request, Response } from 'express';
  *                 results:
  *                   type: array
  *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       type:
- *                         type: string
- *                       name:
- *                         type: string
- *                       email:
- *                         type: string
- *                       phone:
- *                         type: string
- *                       cpf:
- *                         type: string
- *                       street_number:
- *                         type: string
- *                       street_complement:
- *                         type: string
- *                       street_neighborhood:
- *                         type: string
- *                       city:
- *                         type: string
- *                       state:
- *                         type: string
- *                       zip_code:
- *                         type: string
- *                       street_address:
- *                         type: string
- *                       observation:
- *                         type: string
- *                       created_at:
- *                         type: string
- *                         format: date-time
- *                       updated_at:
- *                         type: string
- *                         format: date-time
+ *                     $ref: '#/components/schemas/Donor'
  *                 page:
  *                   type: integer
  *                 limit:
@@ -75,6 +42,8 @@ import { Request, Response } from 'express';
  *                   type: integer
  *                 totalPages:
  *                   type: integer
+ *       401:
+ *         description: Token ausente ou inválido
  *       500:
  *         description: Erro ao buscar doadores
  */
