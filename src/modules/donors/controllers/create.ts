@@ -91,7 +91,7 @@ const createDonor = async (req: Request, res: Response) => {
     if (!validation.success) {
       return res.status(400).json({
         error: 'Dados inválidos',
-        details: validation.error,
+        details: validation.error._zod,
       });
     }
 

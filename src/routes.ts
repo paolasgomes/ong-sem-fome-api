@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authRoutes } from './modules/auth/routes';
 import { donorsRoutes } from './modules/donors/routes';
-import { familiesRoutes } from './modules/families/routes';
+import { familiesRoutes } from './modules/families/routes/index';
 
 const routes = Router();
 
