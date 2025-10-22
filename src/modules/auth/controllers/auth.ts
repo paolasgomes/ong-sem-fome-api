@@ -23,7 +23,7 @@ import { authSchema } from '../schemas/auth';
  *               email:
  *                 type: string
  *                 format: email
- *                 example: admin@ongsemfome.com
+ *                 example: admin@ongsemfome2.com
  *               password:
  *                 type: string
  *                 format: password
