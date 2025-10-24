@@ -97,6 +97,7 @@ const updateCollaborator = async (req: Request, res: Response) => {
     const existingCollaborator = await db('collaborators')
       .where('registration', data.registration)
       .orWhere('email', data.email)
+      .andWhereNot('id', collaboratorId)
       .first();
 
     if (existingCollaborator) {
