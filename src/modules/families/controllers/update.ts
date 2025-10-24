@@ -151,6 +151,7 @@ const updateFamily = async (req: Request, res: Response) => {
     const existingFamily = await db('families')
       .where('responsible_cpf', data.responsible_cpf)
       .orWhere('email', data.email)
+      .andWhereNot('id', id)
       .first();
 
     if (existingFamily) {
