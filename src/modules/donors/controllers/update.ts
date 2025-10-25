@@ -98,6 +98,7 @@ const updateDonor = async (req: Request, res: Response) => {
       zip_code,
       street_address,
       observation,
+      cnpj,
     } = req.body;
 
     const existingDonor = await db('donors')
@@ -128,6 +129,7 @@ const updateDonor = async (req: Request, res: Response) => {
       email,
       phone,
       cpf,
+      cnpj,
       street_number,
       street_complement,
       street_neighborhood,

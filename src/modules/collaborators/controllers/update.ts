@@ -95,8 +95,12 @@ const updateCollaborator = async (req: Request, res: Response) => {
     const data = validation.data;
 
     const existingCollaborator = await db('collaborators')
-      .where('registration', data.registration)
-      .orWhere('email', data.email)
+      .where(function () {
+        this.where('registration', data.registration).orWhere(
+          'email',
+          data.email,
+        );
+      })
       .andWhereNot('id', collaboratorId)
       .first();
 
