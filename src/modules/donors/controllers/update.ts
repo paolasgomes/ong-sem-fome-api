@@ -82,62 +82,54 @@ import { createDonorSchema } from '../schemas/create';
 
 const updateDonor = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-
-    const {
-      type,
-      name,
-      email,
-      phone,
-      cpf,
-      street_number,
-      street_complement,
-      street_neighborhood,
-      city,
-      state,
-      zip_code,
-      street_address,
-      observation,
-      cnpj,
-    } = req.body;
-
-    const existingDonor = await db('donors')
-      .where(function () {
-        this.where('cpf', cpf).orWhere('email', email).orWhere('cnpj', cnpj);
-      })
-      .andWhereNot('id', id)
-      .first();
-
-    if (existingDonor) {
-      return res.status(400).json({
-        error: 'Já existe um doador com este CPF ou email',
-      });
-    }
-
     const validation = createDonorSchema.safeParse(req.body);
-
     if (!validation.success) {
       return res.status(400).json({
         error: 'Dados inválidos',
         details: validation.error._zod,
       });
     }
+    const data = validation.data;
+
+    const id = Number(req.params.id);
+    if (Number.isNaN(id) || id <= 0) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    const { cpf, email, cnpj } = data;
+
+    const existingDonorQuery = db('donors')
+      .where(function () {
+        if (cpf) this.orWhere('cpf', cpf);
+        if (email) this.orWhere('email', email);
+        if (cnpj) this.orWhere('cnpj', cnpj);
+      })
+      .andWhereNot('id', id)
+      .first();
+
+    const existingDonor = await existingDonorQuery;
+
+    if (existingDonor) {
+      return res.status(400).json({
+        error: 'Já existe um doador com este CPF, CNPJ ou email',
+      });
+    }
 
     const updated = await db('donors').where({ id }).update({
-      type,
-      name,
-      email,
-      phone,
-      cpf,
-      cnpj,
-      street_number,
-      street_complement,
-      street_neighborhood,
-      city,
-      state,
-      zip_code,
-      street_address,
-      observation,
+      type: data.type,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      cpf: data.cpf,
+      cnpj: data.cnpj,
+      street_number: data.street_number,
+      street_complement: data.street_complement,
+      street_neighborhood: data.street_neighborhood,
+      city: data.city,
+      state: data.state,
+      zip_code: data.zip_code,
+      street_address: data.street_address,
+      observation: data.observation,
       updated_at: db.fn.now(),
     });
 
@@ -148,8 +140,11 @@ const updateDonor = async (req: Request, res: Response) => {
     const donor = await db('donors').where({ id }).first();
 
     return res.json(donor);
-  } catch (error) {
-    return res.status(500).json({ error: 'Erro ao atualizar doador' });
+  } catch (error: any) {
+    console.error('Erro ao atualizar doador:', error);
+    return res
+      .status(500)
+      .json({ error: 'Erro ao atualizar doador', details: error?.message });
   }
 };
 
