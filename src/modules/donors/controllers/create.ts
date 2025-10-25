@@ -144,7 +144,9 @@ const createDonor = async (req: Request, res: Response) => {
     const donor = await db('donors').where({ id }).first();
     return res.status(201).json(donor);
   } catch (error) {
-    return res.status(500).json({ error: 'Erro ao criar doador' });
+    return res
+      .status(500)
+      .json({ error: 'Erro ao criar doador', description: error });
   }
 };
 
