@@ -101,8 +101,9 @@ const updateDonor = async (req: Request, res: Response) => {
     } = req.body;
 
     const existingDonor = await db('donors')
-      .where('cpf', cpf)
-      .orWhere('email', email)
+      .where(function () {
+        this.where('cpf', cpf).orWhere('email', email);
+      })
       .andWhereNot('id', id)
       .first();
 
