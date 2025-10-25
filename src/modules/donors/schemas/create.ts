@@ -13,7 +13,7 @@ const createDonorSchema = z
       .optional(),
     cnpj: z
       .string()
-      .length(11)
+      .length(14)
       .regex(/^\d{14}$/)
       .optional(),
     street_number: z.string().min(1),
