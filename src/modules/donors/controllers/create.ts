@@ -113,7 +113,11 @@ const createDonor = async (req: Request, res: Response) => {
     } = validation.data;
 
     const existingDonor = await db('donors')
-      .where('cpf', cpf)
+      .where(function () {
+        if (cpf) this.orWhere('cpf', cpf);
+        if (email) this.orWhere('email', email);
+        if (cnpj) this.orWhere('cnpj', cnpj);
+      })
       .orWhere('email', email)
       .first();
 
