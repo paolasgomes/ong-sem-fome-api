@@ -103,7 +103,7 @@ const updateDonor = async (req: Request, res: Response) => {
 
     const existingDonor = await db('donors')
       .where(function () {
-        this.where('cpf', cpf).orWhere('email', email);
+        this.where('cpf', cpf).orWhere('email', email).orWhere('cnpj', cnpj);
       })
       .andWhereNot('id', id)
       .first();
