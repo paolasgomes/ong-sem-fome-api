@@ -110,6 +110,7 @@ const createDonor = async (req: Request, res: Response) => {
       zip_code,
       street_address,
       observation,
+      is_active,
     } = validation.data;
 
     const existingDonor = await db('donors')
@@ -142,11 +143,18 @@ const createDonor = async (req: Request, res: Response) => {
       zip_code,
       street_address,
       observation,
+      is_active,
       updated_at: new Date().toISOString(),
     });
 
     const donor = await db('donors').where({ id }).first();
-    return res.status(201).json(donor);
+
+    const formattedDonor = {
+      ...donor,
+      is_active: donor.is_active === 1,
+    };
+
+    return res.status(201).json(formattedDonor);
   } catch (error) {
     return res
       .status(500)

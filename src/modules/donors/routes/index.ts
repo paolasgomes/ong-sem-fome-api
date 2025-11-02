@@ -5,6 +5,7 @@ import { getDonorById } from '../controllers/getById';
 import { updateDonor } from '../controllers/update';
 import { deleteDonor } from '../controllers/delete';
 import { verifyToken } from '@/modules/auth/middlewares';
+import { updateIsActive } from '../controllers/updateIsActive';
 
 const donorsRoutes = Router();
 
@@ -15,5 +16,6 @@ donorsRoutes.post('/', createDonor);
 donorsRoutes.get('/:id', getDonorById);
 donorsRoutes.put('/:id', updateDonor);
 donorsRoutes.delete('/:id', deleteDonor);
+donorsRoutes.patch('/:id/is-active', updateIsActive);
 
 export { donorsRoutes };

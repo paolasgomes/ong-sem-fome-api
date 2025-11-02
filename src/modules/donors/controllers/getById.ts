@@ -34,11 +34,19 @@ import { Request, Response } from 'express';
 const getDonorById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+
     const donor = await db('donors').where({ id }).first();
+
     if (!donor) {
       return res.status(404).json({ error: 'Doador não encontrado' });
     }
-    return res.json(donor);
+
+    const formattedDonor = {
+      ...donor,
+      is_active: donor.is_active === 1,
+    };
+
+    return res.json(formattedDonor);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao buscar doador' });
   }
