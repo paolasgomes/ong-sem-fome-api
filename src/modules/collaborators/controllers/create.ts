@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { db } from '../../../database/connection';
 import { createCollaboratorSchema } from '../schemas/create';
+import { is } from 'zod/v4/locales';
 
 /**
  * @swagger
@@ -121,12 +122,14 @@ const createCollaborator = async (req: Request, res: Response) => {
       is_volunteer: data.is_volunteer,
       sector_id: data.sector_id ?? null,
       user_id: data.user_id ?? null,
+      is_active: data.is_active,
     });
 
     const collaborator = await db('collaborators').where({ id }).first();
 
     const formattedCollaborator = {
       ...collaborator,
+      is_active: collaborator.is_active === 1,
       is_volunteer: collaborator.is_volunteer === 1,
     };
 

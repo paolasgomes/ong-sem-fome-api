@@ -93,6 +93,7 @@ const getCollaboratorById = async (req: Request, res: Response) => {
 
     return res.json({
       ...rest,
+      is_active: collaborator.is_active === 1,
       sector: sector ?? null,
       user: sanitizedUser,
     });

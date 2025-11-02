@@ -24,6 +24,7 @@ const createCollaboratorSchema = z.object({
   is_volunteer: z.boolean().optional().default(false),
   sector_id: z.number().int().positive().optional().nullable(),
   user_id: z.number().int().positive().optional().nullable(),
+  is_active: z.boolean().optional().default(false),
 });
 
 export { createCollaboratorSchema };

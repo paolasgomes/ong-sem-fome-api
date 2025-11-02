@@ -140,6 +140,8 @@ const updateCollaborator = async (req: Request, res: Response) => {
         is_volunteer: data.is_volunteer,
         sector_id: data.sector_id ?? null,
         user_id: data.user_id ?? null,
+        is_active: data.is_active,
+        updated_at: db.fn.now(),
       });
 
     const collaborator = await db('collaborators')
@@ -148,6 +150,7 @@ const updateCollaborator = async (req: Request, res: Response) => {
 
     const formattedCollaborator = {
       ...collaborator,
+      is_active: collaborator.is_active === 1,
       is_volunteer: collaborator.is_volunteer === 1,
     };
 
