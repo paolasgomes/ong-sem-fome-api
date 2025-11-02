@@ -5,6 +5,7 @@ import { updateCollaborator } from '../controllers/update';
 import { getAllCollaborators } from '../controllers/getAll';
 import { getCollaboratorById } from '../controllers/getById';
 import { deleteCollaborator } from '../controllers/delete';
+import { updateIsActive } from '../controllers/updateIsActive';
 
 const collaboratorsRoutes = Router();
 
@@ -19,5 +20,7 @@ collaboratorsRoutes.get('/', getAllCollaborators);
 collaboratorsRoutes.get('/:id', getCollaboratorById);
 
 collaboratorsRoutes.delete('/:id', deleteCollaborator);
+
+collaboratorsRoutes.patch('/:id/is-active', updateIsActive);
 
 export { collaboratorsRoutes };

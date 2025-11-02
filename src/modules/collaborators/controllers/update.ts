@@ -128,7 +128,7 @@ const updateCollaborator = async (req: Request, res: Response) => {
       }
     }
 
-    const collaboratorData = await db('collaborators')
+    await db('collaborators')
       .where({ id: collaboratorId })
       .update({
         name: data.name,

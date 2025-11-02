@@ -24,6 +24,7 @@ const createDonorSchema = z
     zip_code: z.string().min(1),
     street_address: z.string().min(1),
     observation: z.string().optional(),
+    is_active: z.boolean().optional().default(true),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'pessoa_fisica' && !data.cpf) {
