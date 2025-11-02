@@ -128,17 +128,19 @@ const updateCollaborator = async (req: Request, res: Response) => {
       }
     }
 
-    const collaboratorData = await db('collaborators').update({
-      name: data.name,
-      registration: data.registration,
-      email: data.email,
-      phone: data.phone,
-      admission_date: data.admission_date,
-      dismissal_date: data.dismissal_date,
-      is_volunteer: data.is_volunteer,
-      sector_id: data.sector_id ?? null,
-      user_id: data.user_id ?? null,
-    });
+    const collaboratorData = await db('collaborators')
+      .where({ id: collaboratorId })
+      .update({
+        name: data.name,
+        registration: data.registration,
+        email: data.email,
+        phone: data.phone,
+        admission_date: data.admission_date,
+        dismissal_date: data.dismissal_date,
+        is_volunteer: data.is_volunteer,
+        sector_id: data.sector_id ?? null,
+        user_id: data.user_id ?? null,
+      });
 
     const collaborator = await db('collaborators')
       .where({ id: collaboratorId })
