@@ -1,12 +1,7 @@
+import { hashPassword } from '@/utils/hashPassword';
 import knexLib from 'knex';
-import bcrypt from 'bcrypt';
 
 type Knex = ReturnType<typeof knexLib>;
-
-const hashPassword = async (password: string): Promise<string> => {
-  const saltRounds = 10;
-  return await bcrypt.hash(password, saltRounds);
-};
 
 export async function seed(knex: Knex): Promise<void> {
   await knex('users').del();
