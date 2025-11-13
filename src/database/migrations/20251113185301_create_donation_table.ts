@@ -3,10 +3,10 @@ import type { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('donations', (table) => {
     table.increments('id').primary();
-    table.string('name').notNullable();
     table.enum('type', ['food', 'clothing', 'money', 'campaign']).notNullable();
     table.decimal('amount', 10, 2).nullable();
     table.integer('quantity').nullable();
+    table.enum('unit', ['kg', 'g', 'l', 'ml', 'un']).nullable();
     table.string('observations').nullable();
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(null);

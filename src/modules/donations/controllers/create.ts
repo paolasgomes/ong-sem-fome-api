@@ -1,0 +1,173 @@
+import { db } from '@/database/connection';
+import { Request, Response } from 'express';
+import { CreateDonationInput, createDonationSchema } from '../schemas/create';
+
+/**
+ * @swagger
+ * /donations:
+ *   post:
+ *     summary: Cria uma nova doação
+ *     tags: [Donations]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - type
+ *               - donor_id
+ *               - collaborator_id
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 description: Tipo da doação
+ *                 enum: ['food', 'clothing', 'money', 'campaign']
+ *                 example: 'food'
+ *               amount:
+ *                 type: number
+ *                 description: Valor da doação (se aplicável)
+ *                 example: 50.0
+ *               quantity:
+ *                 type: integer
+ *                 description: Quantidade do produto doado (se aplicável)
+ *                 example: 3
+ *               unit:
+ *                 type: string
+ *                 description: Unidade da quantidade do produto doado (se aplicável)
+ *                 enum: ['kg', 'g', 'l', 'ml', 'un']
+ *                 example: "kg"
+ *               observations:
+ *                 type: string
+ *                 description: Observações sobre a doação
+ *                 example: "Entrega somente aos sábados"
+ *               donor_id:
+ *                 type: integer
+ *                 description: ID do doador (obrigatório)
+ *                 example: 1
+ *               collaborator_id:
+ *                 type: integer
+ *                 description: ID do colaborador que registrou a doação (obrigatório)
+ *                 example: 2
+ *               campaign_id:
+ *                 type: integer
+ *                 description: ID da campanha (opcional)
+ *                 example: 5
+ *               product_id:
+ *                 type: integer
+ *                 description: ID do produto (opcional)
+ *                 example: 10
+ *     responses:
+ *       201:
+ *         description: Doação criada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Donation'
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Token ausente ou inválido
+ *       404:
+ *         description: Recurso relacionado não encontrado (doador, colaborador, campanha ou produto)
+ *       500:
+ *         description: Erro interno do servidor
+ */
+
+const checkForeignKeyExistence = async (data: CreateDonationInput) => {
+  const donor = await db('donors').where({ id: data.donor_id }).first();
+  if (!donor)
+    return { error: { status: 404, body: { error: 'Doador não encontrado' } } };
+
+  const collaborator = await db('collaborators')
+    .where({ id: data.collaborator_id })
+    .first();
+  if (!collaborator)
+    return {
+      error: { status: 404, body: { error: 'Colaborador não encontrado' } },
+    };
+
+  let campaign = null;
+  if (data.campaign_id) {
+    campaign = await db('campaigns').where({ id: data.campaign_id }).first();
+    if (!campaign)
+      return {
+        error: { status: 404, body: { error: 'Campanha não encontrada' } },
+      };
+  }
+
+  let product = null;
+  if (data.product_id) {
+    product = await db('products').where({ id: data.product_id }).first();
+    if (!product)
+      return {
+        error: { status: 404, body: { error: 'Produto não encontrado' } },
+      };
+  }
+
+  return { donor, collaborator, campaign, product };
+};
+
+const createDonation = async (req: Request, res: Response) => {
+  try {
+    const validation = createDonationSchema.safeParse(req.body);
+
+    if (!validation.success) {
+      return res.status(400).json({
+        error: 'Dados inválidos',
+        details: validation.error._zod,
+      });
+    }
+
+    const { data } = validation;
+
+    const foreignData = await checkForeignKeyExistence(data);
+    if ('error' in foreignData) {
+      return foreignData.error
+        ? res.status(foreignData.error?.status).json(foreignData.error?.body)
+        : null;
+    }
+
+    const insertPayload = {
+      type: data.type,
+      amount: data.amount,
+      quantity: data.quantity,
+      observations: data.observations,
+      donor_id: data.donor_id,
+      campaign_id: data.campaign_id,
+      collaborator_id: data.collaborator_id,
+      product_id: data.product_id,
+      created_at: db.fn.now(),
+      updated_at: null,
+    };
+
+    const [id] = await db('donations').insert(insertPayload);
+
+    const donation = await db('donations').where({ id }).first();
+
+    const { donor_id, collaborator_id, campaign_id, product_id, ...rest } =
+      donation as any;
+
+    const formattedDonation = {
+      ...rest,
+      donor: foreignData.donor,
+      collaborator: foreignData.collaborator,
+      campaign: foreignData.campaign ?? null,
+      product: foreignData.product ?? null,
+      amount: donation?.amount
+        ? parseFloat(donation.amount as unknown as string)
+        : null,
+    };
+
+    return res.status(201).json(formattedDonation);
+  } catch (error: any) {
+    console.error('Erro ao criar doação:', error);
+    return res
+      .status(500)
+      .json({ error: 'Erro ao criar doação', details: error?.message });
+  }
+};
+
+export { createDonation };
