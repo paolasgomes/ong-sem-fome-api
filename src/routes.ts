@@ -5,6 +5,7 @@ import { familiesRoutes } from './modules/families/routes/index';
 import { collaboratorsRoutes } from './modules/collaborators/routes';
 import { usersRoutes } from './modules/users/routes';
 import { donationsRoutes } from './modules/donations/routes';
+import { categoriesRoutes } from './modules/categories/routes';
 
 const routes = Router();
 
@@ -14,5 +15,6 @@ routes.use('/families', familiesRoutes);
 routes.use('/collaborators', collaboratorsRoutes);
 routes.use('/users', usersRoutes);
 routes.use('/donations', donationsRoutes);
+routes.use('/categories', categoriesRoutes);
 
 export { routes };
