@@ -11,13 +11,30 @@ const createProduct = async (req: Request, res: Response) => {
   try {
     const validation = createProductSchema.safeParse(req.body);
     if (!validation.success) {
-      return res.status(400).json({ error: 'Dados inválidos', details: validation.error._zod });
+      return res
+        .status(400)
+        .json({ error: 'Dados inválidos', details: validation.error._zod });
     }
     const data: CreateProductInput = validation.data;
 
     if (data.category_id) {
-      const category = await db('categories').where({ id: data.category_id }).first();
-      if (!category) return res.status(404).json({ error: 'Categoria não encontrada' });
+      const category = await db('categories')
+        .where({ id: data.category_id })
+        .first();
+
+      if (!category)
+        return res.status(404).json({ error: 'Categoria não encontrada' });
+    }
+
+    const existingProduct = await db('products')
+      .where({ name: data.name })
+      .andWhere('category_id', data.category_id)
+      .first();
+
+    if (existingProduct) {
+      return res
+        .status(409)
+        .json({ error: 'Produto já existe nessa categoria' });
     }
 
     const insertPayload = {
@@ -25,18 +42,26 @@ const createProduct = async (req: Request, res: Response) => {
       unit: data.unit ?? 'quilogramas',
       minimum_stock: data.minimum_stock ?? 0,
       is_active: data.is_active ?? true,
-      category_id: data.category_id ?? null,
+      category_id: data.category_id,
       created_at: db.fn.now(),
       updated_at: null,
     };
 
     const [id] = await db('products').insert(insertPayload);
+
     const product = await db('products').where({ id }).first();
 
-    return res.status(201).json(product);
+    const formattedProduct = {
+      ...product,
+      is_active: Boolean(product?.is_active),
+    };
+
+    return res.status(201).json(formattedProduct);
   } catch (error: any) {
     console.error('Erro ao criar produto:', error);
-    return res.status(500).json({ error: 'Erro ao criar produto', details: error?.message });
+    return res
+      .status(500)
+      .json({ error: 'Erro ao criar produto', details: error?.message });
   }
 };
 
@@ -49,16 +74,22 @@ const updateProduct = async (req: Request, res: Response) => {
 
     const validation = updateProductSchema.safeParse(req.body);
     if (!validation.success) {
-      return res.status(400).json({ error: 'Dados inválidos', details: validation.error._zod });
+      return res
+        .status(400)
+        .json({ error: 'Dados inválidos', details: validation.error._zod });
     }
     const data: UpdateProductInput = validation.data;
 
     const existing = await db('products').where({ id }).first();
-    if (!existing) return res.status(404).json({ error: 'Produto não encontrado' });
+    if (!existing)
+      return res.status(404).json({ error: 'Produto não encontrado' });
 
     if (data.category_id !== undefined && data.category_id !== null) {
-      const category = await db('categories').where({ id: data.category_id }).first();
-      if (!category) return res.status(404).json({ error: 'Categoria não encontrada' });
+      const category = await db('categories')
+        .where({ id: data.category_id })
+        .first();
+      if (!category)
+        return res.status(404).json({ error: 'Categoria não encontrada' });
     }
 
     const updatePayload: any = {
@@ -72,7 +103,9 @@ const updateProduct = async (req: Request, res: Response) => {
     return res.status(200).json(updated);
   } catch (error: any) {
     console.error('Erro ao atualizar produto:', error);
-    return res.status(500).json({ error: 'Erro ao atualizar produto', details: error?.message });
+    return res
+      .status(500)
+      .json({ error: 'Erro ao atualizar produto', details: error?.message });
   }
 };
 

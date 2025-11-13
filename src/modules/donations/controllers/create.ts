@@ -1,6 +1,7 @@
 import { db } from '@/database/connection';
 import { Request, Response } from 'express';
 import { CreateDonationInput, createDonationSchema } from '../schemas/create';
+import { checkForeignKeyExistence } from '../utils/checkForeignKey';
 
 /**
  * @swagger
@@ -76,40 +77,6 @@ import { CreateDonationInput, createDonationSchema } from '../schemas/create';
  *         description: Erro interno do servidor
  */
 
-const checkForeignKeyExistence = async (data: CreateDonationInput) => {
-  const donor = await db('donors').where({ id: data.donor_id }).first();
-  if (!donor)
-    return { error: { status: 404, body: { error: 'Doador não encontrado' } } };
-
-  const collaborator = await db('collaborators')
-    .where({ id: data.collaborator_id })
-    .first();
-  if (!collaborator)
-    return {
-      error: { status: 404, body: { error: 'Colaborador não encontrado' } },
-    };
-
-  let campaign = null;
-  if (data.campaign_id) {
-    campaign = await db('campaigns').where({ id: data.campaign_id }).first();
-    if (!campaign)
-      return {
-        error: { status: 404, body: { error: 'Campanha não encontrada' } },
-      };
-  }
-
-  let product = null;
-  if (data.product_id) {
-    product = await db('products').where({ id: data.product_id }).first();
-    if (!product)
-      return {
-        error: { status: 404, body: { error: 'Produto não encontrado' } },
-      };
-  }
-
-  return { donor, collaborator, campaign, product };
-};
-
 const createDonation = async (req: Request, res: Response) => {
   try {
     const validation = createDonationSchema.safeParse(req.body);
@@ -148,7 +115,7 @@ const createDonation = async (req: Request, res: Response) => {
     const donation = await db('donations').where({ id }).first();
 
     const { donor_id, collaborator_id, campaign_id, product_id, ...rest } =
-      donation as any;
+      donation;
 
     const formattedDonation = {
       ...rest,

@@ -50,6 +50,14 @@ const createCategory = async (req: Request, res: Response) => {
     }
     const data: CreateCategoryInput = validation.data;
 
+    const exixtingCategory = await db('categories')
+      .where({ name: data.name })
+      .first();
+
+    if (exixtingCategory) {
+      return res.status(400).json({ error: 'Categoria já existe' });
+    }
+
     const insertPayload = {
       name: data.name,
       is_perishable: data.is_perishable ?? false,
@@ -58,9 +66,15 @@ const createCategory = async (req: Request, res: Response) => {
     };
 
     const [id] = await db('categories').insert(insertPayload);
+
     const category = await db('categories').where({ id }).first();
 
-    return res.status(201).json(category);
+    const formattedCategory = {
+      ...category,
+      is_perishable: Boolean(category?.is_perishable),
+    };
+
+    return res.status(201).json(formattedCategory);
   } catch (error: any) {
     console.error('Erro ao criar categoria:', error);
     return res

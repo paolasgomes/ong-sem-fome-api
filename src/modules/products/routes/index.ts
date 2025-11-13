@@ -1,6 +1,6 @@
 import { verifyToken } from '@/modules/auth/middlewares';
 import { Router } from 'express';
-import { createProduct } from '../controllers';
+import { createProduct } from '../controllers/create';
 
 const productsRoutes = Router();
 
