@@ -1,0 +1,46 @@
+import type { Knex } from 'knex';
+
+export async function up(knex: Knex): Promise<void> {
+  return knex.schema.createTable('donations', (table) => {
+    table.increments('id').primary();
+    table.string('name').notNullable();
+    table.enum('type', ['food', 'clothing', 'money', 'campaign']).notNullable();
+    table.decimal('amount', 10, 2).nullable();
+    table.integer('quantity').nullable();
+    table.string('observations').nullable();
+    table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at').defaultTo(null);
+
+    table
+      .integer('donor_id')
+      .unsigned()
+      .references('id')
+      .inTable('donors')
+      .notNullable();
+
+    table
+      .integer('campaign_id')
+      .unsigned()
+      .references('id')
+      .inTable('campaigns')
+      .nullable();
+
+    table
+      .integer('collaborator_id')
+      .unsigned()
+      .references('id')
+      .inTable('collaborators')
+      .notNullable();
+
+    table
+      .integer('product_id')
+      .unsigned()
+      .references('id')
+      .inTable('products')
+      .nullable();
+  });
+}
+
+export async function down(knex: Knex): Promise<void> {
+  return knex.schema.dropTableIfExists('donations');
+}
