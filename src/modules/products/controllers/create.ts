@@ -1,11 +1,6 @@
 import { Request, Response } from 'express';
 import { db } from '@/database/connection';
-import {
-  createProductSchema,
-  updateProductSchema,
-  CreateProductInput,
-  UpdateProductInput,
-} from '../schemas';
+import { createProductSchema, CreateProductInput } from '../schemas';
 
 const createProduct = async (req: Request, res: Response) => {
   try {

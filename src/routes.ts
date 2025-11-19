@@ -7,6 +7,7 @@ import { usersRoutes } from './modules/users/routes';
 import { donationsRoutes } from './modules/donations/routes';
 import { categoriesRoutes } from './modules/categories/routes';
 import { productsRoutes } from './modules/products/routes';
+import { stockRoutes } from './modules/stock/routes';
 
 const routes = Router();
 
@@ -18,5 +19,6 @@ routes.use('/users', usersRoutes);
 routes.use('/donations', donationsRoutes);
 routes.use('/categories', categoriesRoutes);
 routes.use('/products', productsRoutes);
+routes.use('/stock', stockRoutes);
 
 export { routes };
