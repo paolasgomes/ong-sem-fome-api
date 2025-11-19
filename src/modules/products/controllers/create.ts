@@ -2,6 +2,55 @@ import { Request, Response } from 'express';
 import { db } from '@/database/connection';
 import { createProductSchema, CreateProductInput } from '../schemas';
 
+/**
+ * @swagger
+ * /products:
+ *   post:
+ *     summary: Cria um novo produto
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Arroz"
+ *               unit:
+ *                 type: string
+ *                 example: "quilogramas"
+ *               minimum_stock:
+ *                 type: integer
+ *                 example: 10
+ *               is_active:
+ *                 type: boolean
+ *                 example: true
+ *               category_id:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       201:
+ *         description: Produto criado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Dados inválidos
+ *       404:
+ *         description: Categoria não encontrada
+ *       409:
+ *         description: Produto já existe nessa categoria
+ *       500:
+ *         description: Erro interno do servidor
+ */
+
 const createProduct = async (req: Request, res: Response) => {
   try {
     const validation = createProductSchema.safeParse(req.body);
@@ -32,17 +81,7 @@ const createProduct = async (req: Request, res: Response) => {
         .json({ error: 'Produto já existe nessa categoria' });
     }
 
-    const insertPayload = {
-      name: data.name,
-      unit: data.unit ?? 'quilogramas',
-      minimum_stock: data.minimum_stock ?? 0,
-      is_active: data.is_active ?? true,
-      category_id: data.category_id,
-      created_at: db.fn.now(),
-      updated_at: null,
-    };
-
-    const [id] = await db('products').insert(insertPayload);
+    const [id] = await db('products').insert(data);
 
     const product = await db('products').where({ id }).first();
 

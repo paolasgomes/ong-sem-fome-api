@@ -35,6 +35,7 @@ const updateProduct = async (req: Request, res: Response) => {
     };
 
     await db('products').where({ id }).update(updatePayload);
+
     const updated = await db('products').where({ id }).first();
 
     return res.status(200).json(updated);

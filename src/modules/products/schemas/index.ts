@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const createProductSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório'),
+  in_stock: z.number().int().nonnegative().optional().default(0),
   unit: z.string().min(1).optional().default('quilogramas'),
   minimum_stock: z.number().int().nonnegative().optional().default(0),
   is_active: z.boolean().optional().default(true),
