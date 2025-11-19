@@ -90,7 +90,8 @@ const createDonation = async (req: Request, res: Response) => {
 
     const { data } = validation;
 
-    const foreignData = await checkForeignKeyExistence(data);
+    let foreignData = await checkForeignKeyExistence(data);
+
     if ('error' in foreignData) {
       return foreignData.error
         ? res.status(foreignData.error?.status).json(foreignData.error?.body)
@@ -110,9 +111,29 @@ const createDonation = async (req: Request, res: Response) => {
       updated_at: null,
     };
 
-    const [id] = await db('donations').insert(insertPayload);
+    let insertedId: number | undefined = undefined;
 
-    const donation = await db('donations').where({ id }).first();
+    await db.transaction(async (trx) => {
+      const [id] = await trx('donations').insert(insertPayload);
+      insertedId = id;
+
+      if (data.product_id && data.quantity && data.quantity > 0) {
+        const updatedQuantity =
+          (foreignData.product.in_stock || 0) + data.quantity;
+
+        foreignData.product.in_stock = updatedQuantity;
+
+        await trx('products')
+          .where({ id: data.product_id })
+          .update({ in_stock: updatedQuantity, updated_at: db.fn.now() });
+      }
+    });
+
+    if (!insertedId) {
+      throw new Error('Não foi possível inserir a doação');
+    }
+
+    const donation = await db('donations').where({ id: insertedId }).first();
 
     const { donor_id, collaborator_id, campaign_id, product_id, ...rest } =
       donation;
