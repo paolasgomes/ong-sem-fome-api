@@ -9,6 +9,7 @@ import { categoriesRoutes } from './modules/categories/routes';
 import { productsRoutes } from './modules/products/routes';
 import { stockRoutes } from './modules/stock/routes';
 import { foodBasketsRoutes } from './modules/food-basket/routes';
+import { foodDistributionsRoutes } from './modules/food-basket-distributions/routes';
 
 const routes = Router();
 
@@ -22,5 +23,6 @@ routes.use('/categories', categoriesRoutes);
 routes.use('/products', productsRoutes);
 routes.use('/stock', stockRoutes);
 routes.use('/food-baskets', foodBasketsRoutes);
+routes.use('/food-distributions', foodDistributionsRoutes);
 
 export { routes };

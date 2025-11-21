@@ -83,7 +83,9 @@ const updateFoodBasket = async (req: Request, res: Response) => {
 
     await db
       .transaction(async (trx) => {
-        await trx('food_baskets').where({ id: basketId }).update(data);
+        await trx('food_baskets')
+          .where({ id: basketId })
+          .update({ ...data, updated_at: db.fn.now() });
 
         if (!products?.length || !products) return;
 
