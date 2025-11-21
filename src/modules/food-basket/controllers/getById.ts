@@ -3,7 +3,7 @@ import { db } from '@/database/connection';
 
 /**
  * @swagger
- * /food-baskets:
+ * /food-baskets/{id}:
  *   get:
  *     summary: Registra a distribuição de uma cesta de alimentos
  *     tags: [FoodBasketDistributions]
