@@ -44,6 +44,11 @@ import { createDistributionSchema } from '../schemas/createDistributionSchema';
  *                 type: string
  *                 description: Observações sobre a distribuição
  *                 example: "Entregue com conferência de documentos"
+ *               status:
+ *                 type: string
+ *                 enum: [pending, delivered, canceled]
+ *                 description: Status da distribuição
+ *                 example: "pending"
  *     responses:
  *       201:
  *         description: Distribuição registrada com sucesso

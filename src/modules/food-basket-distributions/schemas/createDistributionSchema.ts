@@ -25,6 +25,7 @@ const createDistributionSchema = z.object({
   delivery_date: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: 'Data de entrega inválida',
   }),
+  status: z.enum(['pending', 'delivered', 'canceled']).default('pending'),
 });
 
 interface CreateDistributionInput
