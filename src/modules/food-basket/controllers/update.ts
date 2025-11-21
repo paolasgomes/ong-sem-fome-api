@@ -6,7 +6,7 @@ import { updateFoodBasketSchema } from '../schemas/updateFoodBasketSchema';
 /**
  * @swagger
  * /food-baskets/:id:
- *   post:
+ *   put:
  *     summary: Atualiza a cesta de alimentos
  *     tags: [FoodBaskets]
  *     security:
