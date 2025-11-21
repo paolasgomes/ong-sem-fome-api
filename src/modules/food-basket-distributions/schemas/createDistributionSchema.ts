@@ -27,4 +27,7 @@ const createDistributionSchema = z.object({
   }),
 });
 
-export { createDistributionSchema };
+interface CreateDistributionInput
+  extends z.infer<typeof createDistributionSchema> {}
+
+export { createDistributionSchema, CreateDistributionInput };
