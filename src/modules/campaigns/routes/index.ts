@@ -3,8 +3,11 @@ import { createCampaign } from '../controllers/create';
 import { updateCampaign } from '../controllers/update';
 import { getAllCampaigns } from '../controllers/getAll';
 import { getCampaignById } from '../controllers/getById';
+import { verifyToken } from '@/modules/auth/middlewares';
 
 const campaignsRoutes = Router();
+
+campaignsRoutes.use(verifyToken);
 
 campaignsRoutes.post('/', createCampaign);
 campaignsRoutes.put('/:id', updateCampaign);
