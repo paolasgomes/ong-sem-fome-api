@@ -10,6 +10,7 @@ import { productsRoutes } from './modules/products/routes';
 import { stockRoutes } from './modules/stock/routes';
 import { foodBasketsRoutes } from './modules/food-basket/routes';
 import { foodDistributionsRoutes } from './modules/food-basket-distributions/routes';
+import { campaignsRoutes } from './modules/campaigns/routes';
 
 const routes = Router();
 
@@ -24,5 +25,6 @@ routes.use('/products', productsRoutes);
 routes.use('/stock', stockRoutes);
 routes.use('/food-baskets', foodBasketsRoutes);
 routes.use('/food-distributions', foodDistributionsRoutes);
+routes.use('/campaigns', campaignsRoutes);
 
 export { routes };
