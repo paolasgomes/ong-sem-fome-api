@@ -11,6 +11,7 @@ import { stockRoutes } from './modules/stock/routes';
 import { foodBasketsRoutes } from './modules/food-basket/routes';
 import { foodDistributionsRoutes } from './modules/food-basket-distributions/routes';
 import { campaignsRoutes } from './modules/campaigns/routes';
+import { reportsRoutes } from './modules/reports/routes';
 
 const routes = Router();
 
@@ -26,5 +27,6 @@ routes.use('/stock', stockRoutes);
 routes.use('/food-baskets', foodBasketsRoutes);
 routes.use('/food-distributions', foodDistributionsRoutes);
 routes.use('/campaigns', campaignsRoutes);
+routes.use('/reports', reportsRoutes);
 
 export { routes };
