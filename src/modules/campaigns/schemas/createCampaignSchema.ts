@@ -62,4 +62,6 @@ const createCampaignSchema = z
     }
   });
 
+export const updateCampaignSchema = createCampaignSchema.partial();
+
 export { createCampaignSchema };
