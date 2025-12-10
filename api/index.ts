@@ -9,4 +9,6 @@ moduleAlias.addAliases({
 import 'dotenv/config';
 import app from '../src/app';
 
+console.log('DATABASE_URL em produção:', process.env.DATABASE_URL);
+
 export default app;

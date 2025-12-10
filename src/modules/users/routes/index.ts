@@ -7,11 +7,9 @@ import { getUserById } from '../controllers/getById';
 
 const usersRoutes = Router();
 
-usersRoutes.use(verifyToken);
-
 usersRoutes.post('/', createUser);
-usersRoutes.put('/:id', updateUser);
-usersRoutes.get('/', getAllUsers);
-usersRoutes.get('/:id', getUserById);
+usersRoutes.put('/:id', updateUser, verifyToken);
+usersRoutes.get('/', getAllUsers, verifyToken);
+usersRoutes.get('/:id', getUserById, verifyToken);
 
 export { usersRoutes };
