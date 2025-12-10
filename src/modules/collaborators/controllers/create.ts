@@ -112,18 +112,20 @@ const createCollaborator = async (req: Request, res: Response) => {
       }
     }
 
-    const [id] = await db('collaborators').insert({
-      name: data.name,
-      registration: data.registration,
-      email: data.email,
-      phone: data.phone,
-      admission_date: data.admission_date,
-      dismissal_date: data.dismissal_date,
-      is_volunteer: data.is_volunteer,
-      sector_id: data.sector_id ?? null,
-      user_id: data.user_id ?? null,
-      is_active: data.is_active,
-    });
+    const [{ id }] = await db('collaborators')
+      .insert({
+        name: data.name,
+        registration: data.registration,
+        email: data.email,
+        phone: data.phone,
+        admission_date: data.admission_date,
+        dismissal_date: data.dismissal_date,
+        is_volunteer: data.is_volunteer,
+        sector_id: data.sector_id ?? null,
+        user_id: data.user_id ?? null,
+        is_active: data.is_active,
+      })
+      .returning('id');
 
     const collaborator = await db('collaborators').where({ id }).first();
 

@@ -114,7 +114,9 @@ const createDonation = async (req: Request, res: Response) => {
     let insertedId: number | undefined = undefined;
 
     await db.transaction(async (trx) => {
-      const [id] = await trx('donations').insert(insertPayload);
+      const [{ id }] = await trx('donations')
+        .insert(insertPayload)
+        .returning('id');
       insertedId = id;
 
       if (data.product_id && data.quantity && data.quantity > 0) {

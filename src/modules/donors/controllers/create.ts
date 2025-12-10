@@ -128,24 +128,26 @@ const createDonor = async (req: Request, res: Response) => {
       });
     }
 
-    const [id] = await db('donors').insert({
-      type,
-      name,
-      email,
-      phone,
-      cpf: cpf || null,
-      cnpj: cnpj || null,
-      street_number,
-      street_complement,
-      street_neighborhood,
-      city,
-      state,
-      zip_code,
-      street_address,
-      observation,
-      is_active,
-      updated_at: new Date().toISOString(),
-    });
+    const [{ id }] = await db('donors')
+      .insert({
+        type,
+        name,
+        email,
+        phone,
+        cpf: cpf || null,
+        cnpj: cnpj || null,
+        street_number,
+        street_complement,
+        street_neighborhood,
+        city,
+        state,
+        zip_code,
+        street_address,
+        observation,
+        is_active,
+        updated_at: new Date().toISOString(),
+      })
+      .returning('id');
 
     const donor = await db('donors').where({ id }).first();
 

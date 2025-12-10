@@ -112,7 +112,9 @@ const createDistribution = async (req: Request, res: Response) => {
 
     await db
       .transaction(async (trx) => {
-        const [id] = await trx('food_basket_distributions').insert(data);
+        const [{ id }] = await trx('food_basket_distributions')
+          .insert(data)
+          .returning('id');
 
         const basketItems = await trx('food_baskets_items')
           .where({ food_basket_id: data.food_basket_id })

@@ -112,7 +112,7 @@ const createCampaign = async (req: Request, res: Response) => {
       });
     }
 
-    const [id] = await db('campaigns').insert(data);
+    const [{ id }] = await db('campaigns').insert(data).returning('id');
 
     const campaign = await db('campaigns').where({ id }).first();
 

@@ -70,7 +70,7 @@ const createFoodBasket = async (req: Request, res: Response) => {
 
     await db
       .transaction(async (trx) => {
-        const [id] = await trx('food_baskets').insert(data);
+        const [{ id }] = await trx('food_baskets').insert(data).returning('id');
 
         await Promise.all(
           products.map(async (product) => {
