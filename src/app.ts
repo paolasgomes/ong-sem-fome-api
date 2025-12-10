@@ -12,4 +12,8 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(routes);
 
+app.get('/health', (req, res) => {
+  res.json({ ok: true });
+});
+
 export default app;
