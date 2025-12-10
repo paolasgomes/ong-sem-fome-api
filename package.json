@@ -13,9 +13,10 @@
     "migrate:rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "seed:make": "knex seed:make",
-    "build": "rimraf dist && tsc",
+    "build": "tsc",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist"
+    "add-build": "git add dist",
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "",
