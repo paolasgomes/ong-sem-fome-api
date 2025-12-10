@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-
     "module": "CommonJS",
     "target": "ES2022",
     "lib": ["esnext"],
@@ -11,6 +10,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+
+    "rootDir": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
