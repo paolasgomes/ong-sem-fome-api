@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foodBasketsRoutes = void 0;
+const middlewares_1 = require("@/modules/auth/middlewares");
+const express_1 = require("express");
+const create_1 = require("../controllers/create");
+const update_1 = require("../controllers/update");
+const getAll_1 = require("../controllers/getAll");
+const getById_1 = require("../controllers/getById");
+const foodBasketsRoutes = (0, express_1.Router)();
+exports.foodBasketsRoutes = foodBasketsRoutes;
+foodBasketsRoutes.use(middlewares_1.verifyToken);
+foodBasketsRoutes.post('/', create_1.createFoodBasket);
+foodBasketsRoutes.put('/:id', update_1.updateFoodBasket);
+foodBasketsRoutes.get('/', getAll_1.getAllFoodBaskets);
+foodBasketsRoutes.get('/:id', getById_1.getByIdFoodBaskets);

@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.productsRoutes = void 0;
+const middlewares_1 = require("@/modules/auth/middlewares");
+const express_1 = require("express");
+const create_1 = require("../controllers/create");
+const getAll_1 = require("../controllers/getAll");
+const update_1 = require("../controllers/update");
+const productsRoutes = (0, express_1.Router)();
+exports.productsRoutes = productsRoutes;
+productsRoutes.use(middlewares_1.verifyToken);
+productsRoutes.post('/', create_1.createProduct);
+productsRoutes.get('/', getAll_1.getAllProducts);
+productsRoutes.put('/:id', update_1.updateProduct);

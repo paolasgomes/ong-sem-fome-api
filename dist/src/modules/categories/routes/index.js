@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.categoriesRoutes = void 0;
+const middlewares_1 = require("@/modules/auth/middlewares");
+const express_1 = require("express");
+const create_1 = require("../controllers/create");
+const getAll_1 = require("../controllers/getAll");
+const categoriesRoutes = (0, express_1.Router)();
+exports.categoriesRoutes = categoriesRoutes;
+categoriesRoutes.use(middlewares_1.verifyToken);
+categoriesRoutes.post('/', create_1.createCategory);
+categoriesRoutes.get('/', getAll_1.getAllCategories);

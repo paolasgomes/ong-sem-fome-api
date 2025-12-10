@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foodDistributionsRoutes = void 0;
+const middlewares_1 = require("@/modules/auth/middlewares");
+const express_1 = require("express");
+const create_1 = require("../controllers/create");
+const getAll_1 = require("../controllers/getAll");
+const updateStatus_1 = require("../controllers/updateStatus");
+const foodDistributionsRoutes = (0, express_1.Router)();
+exports.foodDistributionsRoutes = foodDistributionsRoutes;
+foodDistributionsRoutes.use(middlewares_1.verifyToken);
+foodDistributionsRoutes.post('/', create_1.createDistribution);
+foodDistributionsRoutes.get('/', getAll_1.getAllDistributions);
+foodDistributionsRoutes.patch('/status/:id', updateStatus_1.updateStatus);
