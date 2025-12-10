@@ -17,6 +17,9 @@
     "add-build": "git add dist",
     "vercel-build": "echo hello"
   },
+  "_moduleAliases": {
+    "@": "dist/src"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -53,6 +56,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "knex-paginate": "^3.2.0",
+    "module-alias": "^2.2.3",
     "pg": "^8.16.3",
     "serverless-http": "^4.0.0",
     "sqlite3": "^5.1.7",
