@@ -60,6 +60,7 @@
     "knex-paginate": "^3.2.0",
     "module-alias": "^2.2.3",
     "pg": "^8.16.3",
+    "postgres": "^3.4.7",
     "serverless-http": "^4.0.0",
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
