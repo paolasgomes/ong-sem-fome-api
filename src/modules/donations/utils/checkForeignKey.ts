@@ -1,4 +1,4 @@
-import { db } from '@/database/connection';
+import { db } from '../../../database/connection';
 import { CreateDonationInput } from '../schemas/create';
 
 const checkForeignKeyExistence = async (data: CreateDonationInput) => {

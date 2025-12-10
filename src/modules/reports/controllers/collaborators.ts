@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { db } from '@/database/connection';
+import { db } from '../../../database/connection';
 
 interface CollaboratorRow {
   id: number;

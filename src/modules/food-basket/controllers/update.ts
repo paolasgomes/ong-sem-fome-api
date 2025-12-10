@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { createFoodBasketSchema } from '../schemas/createFoodBasketSchema';
-import { db } from '@/database/connection';
+import { db } from '../../../database/connection';
 import { updateFoodBasketSchema } from '../schemas/updateFoodBasketSchema';
 
 /**

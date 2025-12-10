@@ -1,4 +1,4 @@
-import { db } from '@/database/connection';
+import { db } from '../../../database/connection';
 import { Request, Response } from 'express';
 import { CreateDonationInput, createDonationSchema } from '../schemas/create';
 import { checkForeignKeyExistence } from '../utils/checkForeignKey';
