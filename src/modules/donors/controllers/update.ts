@@ -144,7 +144,7 @@ const updateDonor = async (req: Request, res: Response) => {
 
     const formattedDonor = {
       ...donor,
-      updated_at: db.fn.now(),
+      updated_at: new Date().toISOString(),
     };
 
     return res.json(formattedDonor);
