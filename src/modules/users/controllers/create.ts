@@ -72,14 +72,12 @@ const createUser = async (req: Request, res: Response) => {
       });
     }
 
-    const [{ id }] = await db('users')
-      .insert({
-        name,
-        email,
-        password: await hashPassword(password),
-        role,
-      })
-      .returning('id');
+    const [id] = await db('users').insert({
+      name,
+      email,
+      password: await hashPassword(password),
+      role,
+    });
 
     const user = await db('users').where({ id }).first();
 

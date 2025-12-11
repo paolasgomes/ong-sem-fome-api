@@ -151,26 +151,24 @@ const createFamily = async (req: Request, res: Response) => {
       });
     }
 
-    const [{ id }] = await db('families')
-      .insert({
-        responsible_name: data.responsible_name,
-        responsible_cpf: data.responsible_cpf,
-        street_number: data.street_number,
-        street_complement: data.street_complement,
-        street_neighborhood: data.street_neighborhood,
-        city: data.city,
-        state: data.state,
-        zip_code: data.zip_code,
-        street_address: data.street_address,
-        phone: data.phone,
-        email: data.email,
-        members_count: data.members_count,
-        income_bracket: data.income_bracket,
-        address: data.address,
-        observation: data.observation,
-        is_active: data.is_active,
-      })
-      .returning('id');
+    const [id] = await db('families').insert({
+      responsible_name: data.responsible_name,
+      responsible_cpf: data.responsible_cpf,
+      street_number: data.street_number,
+      street_complement: data.street_complement,
+      street_neighborhood: data.street_neighborhood,
+      city: data.city,
+      state: data.state,
+      zip_code: data.zip_code,
+      street_address: data.street_address,
+      phone: data.phone,
+      email: data.email,
+      members_count: data.members_count,
+      income_bracket: data.income_bracket,
+      address: data.address,
+      observation: data.observation,
+      is_active: data.is_active,
+    });
 
     const family = await db('families').where({ id }).first();
 

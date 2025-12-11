@@ -1,4 +1,4 @@
-import { hashPassword } from '@/utils/hashPassword';
+import { hashPassword } from '../../utils/hashPassword';
 import knexLib from 'knex';
 
 type Knex = ReturnType<typeof knexLib>;

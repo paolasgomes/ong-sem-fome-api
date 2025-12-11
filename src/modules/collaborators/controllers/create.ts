@@ -112,8 +112,7 @@ const createCollaborator = async (req: Request, res: Response) => {
       }
     }
 
-    const [{ id }] = await db('collaborators')
-      .insert({
+    const [id] = await db('collaborators').insert({
         name: data.name,
         registration: data.registration,
         email: data.email,
@@ -124,8 +123,7 @@ const createCollaborator = async (req: Request, res: Response) => {
         sector_id: data.sector_id ?? null,
         user_id: data.user_id ?? null,
         is_active: data.is_active,
-      })
-      .returning('id');
+      });
 
     const collaborator = await db('collaborators').where({ id }).first();
 

@@ -112,9 +112,7 @@ const createDistribution = async (req: Request, res: Response) => {
 
     await db
       .transaction(async (trx) => {
-        const [{ id }] = await trx('food_basket_distributions')
-          .insert(data)
-          .returning('id');
+        const [id] = await trx('food_basket_distributions').insert(data);
 
         const basketItems = await trx('food_baskets_items')
           .where({ food_basket_id: data.food_basket_id })
@@ -135,12 +133,10 @@ const createDistribution = async (req: Request, res: Response) => {
                 );
               }
 
-              await trx('products')
-                .where({ id: item.product_id })
-                .update({
-                  in_stock: updatedStock,
-                  updated_at: new Date().toISOString(),
-                });
+              await trx('products').where({ id: item.product_id }).update({
+                in_stock: updatedStock,
+                updated_at: new Date().toISOString(),
+              });
             } else {
               throw new Error(
                 `Produto com ID ${item.product_id} não encontrado`,

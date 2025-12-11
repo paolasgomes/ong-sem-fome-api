@@ -2,11 +2,11 @@ import type { Knex } from 'knex';
 import 'dotenv/config';
 
 const common: Knex.Config = {
-  client: 'pg',
+  client: 'sqlite3',
   connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    filename: './src/database/database.db',
   },
+  useNullAsDefault: true,
   migrations: {
     extension: 'ts',
     directory: './src/database/migrations',
@@ -21,5 +21,4 @@ const config: { [key: string]: Knex.Config } = {
   development: common,
   production: common,
 };
-
 export default config;

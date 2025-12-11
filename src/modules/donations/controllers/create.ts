@@ -113,9 +113,7 @@ const createDonation = async (req: Request, res: Response) => {
     let insertedId: number | undefined = undefined;
 
     await db.transaction(async (trx) => {
-      const [{ id }] = await trx('donations')
-        .insert(insertPayload)
-        .returning('id');
+      const [id] = await trx('donations').insert(insertPayload);
       insertedId = id;
 
       if (data.product_id && data.quantity && data.quantity > 0) {
@@ -124,12 +122,10 @@ const createDonation = async (req: Request, res: Response) => {
 
         foreignData.product.in_stock = updatedQuantity;
 
-        await trx('products')
-          .where({ id: data.product_id })
-          .update({
-            in_stock: updatedQuantity,
-            updated_at: new Date().toISOString(),
-          });
+        await trx('products').where({ id: data.product_id }).update({
+          in_stock: updatedQuantity,
+          updated_at: new Date().toISOString(),
+        });
       }
     });
 

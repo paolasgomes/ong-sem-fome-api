@@ -81,7 +81,7 @@ const createProduct = async (req: Request, res: Response) => {
         .json({ error: 'Produto já existe nessa categoria' });
     }
 
-    const [{ id }] = await db('products').insert(data).returning('id');
+    const [id] = await db('products').insert(data);
 
     const product = await db('products').where({ id }).first();
 

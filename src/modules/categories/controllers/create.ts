@@ -64,9 +64,7 @@ const createCategory = async (req: Request, res: Response) => {
       updated_at: null,
     };
 
-    const [{ id }] = await db('categories')
-      .insert(insertPayload)
-      .returning('id');
+    const [id] = await db('categories').insert(insertPayload);
 
     const category = await db('categories').where({ id }).first();
 
