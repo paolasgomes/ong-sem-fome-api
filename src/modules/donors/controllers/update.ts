@@ -140,9 +140,11 @@ const updateDonor = async (req: Request, res: Response) => {
 
     const donor = await db('donors').where({ id }).first();
 
+    console.log('donor => ', donor);
+
     const formattedDonor = {
       ...donor,
-      is_active: donor.is_active === 1,
+      updated_at: db.fn.now(),
     };
 
     return res.json(formattedDonor);

@@ -116,7 +116,6 @@ const updateCampaign = async (req: Request, res: Response) => {
       .update({
         ...data,
         updated_at: db.fn.now(),
-        is_active: Boolean(data.is_active),
       });
 
     if (!updated) {
