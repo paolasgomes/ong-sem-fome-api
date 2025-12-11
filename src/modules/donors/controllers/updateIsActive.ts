@@ -108,18 +108,12 @@ const updateIsActive = async (req: Request, res: Response) => {
 
     await db('donors').where({ id }).update({
       is_active: data.is_active,
-      updated_at: db.fn.now(),
+      updated_at: new Date().toISOString(),
     });
 
     const donor = await db('donors').where({ id }).first();
 
-    const formattedDonor = {
-      ...donor,
-      is_active: donor.is_active === 1,
-      is_volunteer: donor.is_volunteer === 1,
-    };
-
-    return res.status(201).json(formattedDonor);
+    return res.status(201).json(donor);
   } catch (error) {
     console.log('error => ', error);
     return res.status(500).json({ error: 'Erro ao atualizar doador' });

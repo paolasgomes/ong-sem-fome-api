@@ -41,12 +41,7 @@ const getDonorById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Doador não encontrado' });
     }
 
-    const formattedDonor = {
-      ...donor,
-      is_active: donor.is_active === 1,
-    };
-
-    return res.json(formattedDonor);
+    return res.json(donor);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao buscar doador' });
   }

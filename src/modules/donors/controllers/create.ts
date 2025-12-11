@@ -151,12 +151,7 @@ const createDonor = async (req: Request, res: Response) => {
 
     const donor = await db('donors').where({ id }).first();
 
-    const formattedDonor = {
-      ...donor,
-      is_active: donor.is_active === 1,
-    };
-
-    return res.status(201).json(formattedDonor);
+    return res.status(201).json(donor);
   } catch (error) {
     return res
       .status(500)

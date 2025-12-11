@@ -62,13 +62,8 @@ const getAllDonors = async (req: Request, res: Response) => {
 
     const totalPages = result.pagination.lastPage || 1;
 
-    const formattedData = result.data.map((donor) => ({
-      ...donor,
-      is_active: donor.is_active === 1,
-    }));
-
     return res.json({
-      results: formattedData,
+      results: result.data,
       page: result.pagination.currentPage,
       limit: result.pagination.perPage,
       total: result.pagination.total,
