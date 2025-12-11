@@ -174,12 +174,7 @@ const createFamily = async (req: Request, res: Response) => {
 
     const family = await db('families').where({ id }).first();
 
-    const formattedFamily = {
-      ...family,
-      is_active: family.is_active === 1,
-    };
-
-    return res.status(201).json(formattedFamily);
+    return res.status(201).json(family);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao criar família' });
   }

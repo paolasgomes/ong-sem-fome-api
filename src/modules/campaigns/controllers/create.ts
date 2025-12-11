@@ -116,12 +116,7 @@ const createCampaign = async (req: Request, res: Response) => {
 
     const campaign = await db('campaigns').where({ id }).first();
 
-    const formattedCampaign = {
-      ...campaign,
-      is_active: campaign.is_active === 1,
-    };
-
-    return res.status(201).json(formattedCampaign);
+    return res.status(201).json(campaign);
   } catch (error) {
     return res
       .status(500)

@@ -41,12 +41,7 @@ const getCampaignById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Campanha não encontrada' });
     }
 
-    const formattedCampaign = {
-      ...campaign,
-      is_active: campaign.is_active === 1,
-    };
-
-    return res.json(formattedCampaign);
+    return res.json(campaign);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao buscar campanha' });
   }

@@ -40,12 +40,7 @@ const getFamilyById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Família não encontrada' });
     }
 
-    const formattedFamily = {
-      ...family,
-      is_active: family.is_active === 1,
-    };
-
-    return res.json(formattedFamily);
+    return res.json(family);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao buscar família' });
   }

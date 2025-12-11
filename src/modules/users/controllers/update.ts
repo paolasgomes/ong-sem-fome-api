@@ -91,7 +91,7 @@ const updateUser = async (req: Request, res: Response) => {
         name: data.name,
         email: data.email,
         role: data.role,
-        updated_at: db.fn.now(),
+        updated_at: new Date().toISOString(),
         ...(data.password && { password: await hashPassword(data.password) }),
       });
 

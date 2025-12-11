@@ -181,7 +181,7 @@ const updateFamily = async (req: Request, res: Response) => {
       address: data.address,
       observation: data.observation,
       is_active: data.is_active,
-      updated_at: db.fn.now(),
+      updated_at: new Date().toISOString(),
     });
 
     if (!updatedFamily) {
@@ -190,12 +190,7 @@ const updateFamily = async (req: Request, res: Response) => {
 
     const family = await db('families').where({ id }).first();
 
-    const formattedFamily = {
-      ...family,
-      is_active: family.is_active === 1,
-    };
-
-    return res.status(200).json(formattedFamily);
+    return res.status(200).json(family);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao atualizar família' });
   }

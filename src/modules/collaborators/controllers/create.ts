@@ -129,15 +129,8 @@ const createCollaborator = async (req: Request, res: Response) => {
 
     const collaborator = await db('collaborators').where({ id }).first();
 
-    const formattedCollaborator = {
-      ...collaborator,
-      is_active: collaborator.is_active === 1,
-      is_volunteer: collaborator.is_volunteer === 1,
-    };
-
-    return res.status(201).json(formattedCollaborator);
+    return res.status(201).json(collaborator);
   } catch (error) {
-    console.log('error => ', error);
     return res.status(500).json({ error: 'Erro ao criar colaborador' });
   }
 };

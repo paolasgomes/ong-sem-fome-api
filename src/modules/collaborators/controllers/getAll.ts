@@ -122,7 +122,6 @@ const getAllCollaborators = async (req: Request, res: Response) => {
       const { sector_id, user_id, ...rest } = c;
       return {
         ...rest,
-        is_active: c.is_active === 1,
         sector: sector_id ? (sectorMap[sector_id] ?? null) : null,
         user: user_id ? (userMap[user_id] ?? null) : null,
       };

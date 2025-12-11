@@ -115,7 +115,7 @@ const updateCampaign = async (req: Request, res: Response) => {
       .where({ id })
       .update({
         ...data,
-        updated_at: db.fn.now(),
+        updated_at: new Date().toISOString(),
       });
 
     if (!updated) {
@@ -124,12 +124,7 @@ const updateCampaign = async (req: Request, res: Response) => {
 
     const campaign = await db('campaigns').where({ id }).first();
 
-    const formattedCampaign = {
-      ...campaign,
-      is_active: campaign.is_active === 1,
-    };
-
-    return res.json(formattedCampaign);
+    return res.json(campaign);
   } catch (error: any) {
     console.error('Erro ao atualizar campanha:', error);
     return res

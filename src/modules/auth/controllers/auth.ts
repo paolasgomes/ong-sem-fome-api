@@ -82,8 +82,6 @@ const login = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Email e/ou senha incorretos' });
     }
 
-    console.log('user => ', user);
-
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {

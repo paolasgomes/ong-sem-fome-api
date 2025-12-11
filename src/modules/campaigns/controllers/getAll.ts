@@ -81,7 +81,6 @@ const getAllCampaigns = async (req: Request, res: Response) => {
 
     const formattedData = result.data.map((campaign) => ({
       ...campaign,
-      is_active: campaign.is_active === 1,
     }));
 
     return res.json({

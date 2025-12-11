@@ -131,7 +131,7 @@ const updateDonor = async (req: Request, res: Response) => {
       street_address: data.street_address,
       observation: data.observation,
       is_active: data.is_active,
-      updated_at: db.fn.now(),
+      updated_at: new Date().toISOString(),
     });
 
     if (!updated) {

@@ -85,12 +85,7 @@ const createProduct = async (req: Request, res: Response) => {
 
     const product = await db('products').where({ id }).first();
 
-    const formattedProduct = {
-      ...product,
-      is_active: Boolean(product?.is_active),
-    };
-
-    return res.status(201).json(formattedProduct);
+    return res.status(201).json(product);
   } catch (error: any) {
     console.error('Erro ao criar produto:', error);
     return res

@@ -107,7 +107,6 @@ const createDonation = async (req: Request, res: Response) => {
       campaign_id: data.campaign_id,
       collaborator_id: data.collaborator_id,
       product_id: data.product_id,
-      created_at: db.fn.now(),
       updated_at: null,
     };
 
@@ -127,7 +126,10 @@ const createDonation = async (req: Request, res: Response) => {
 
         await trx('products')
           .where({ id: data.product_id })
-          .update({ in_stock: updatedQuantity, updated_at: db.fn.now() });
+          .update({
+            in_stock: updatedQuantity,
+            updated_at: new Date().toISOString(),
+          });
       }
     });
 

@@ -31,7 +31,7 @@ const updateProduct = async (req: Request, res: Response) => {
 
     const updatePayload: any = {
       ...data,
-      updated_at: db.fn.now(),
+      updated_at: new Date().toISOString(),
     };
 
     await db('products').where({ id }).update(updatePayload);

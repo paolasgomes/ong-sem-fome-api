@@ -61,7 +61,6 @@ const createCategory = async (req: Request, res: Response) => {
     const insertPayload = {
       name: data.name,
       is_perishable: data.is_perishable ?? false,
-      created_at: db.fn.now(),
       updated_at: null,
     };
 
@@ -144,7 +143,7 @@ const updateCategory = async (req: Request, res: Response) => {
 
     const updatePayload: Partial<typeof existing> = {
       ...data,
-      updated_at: db.fn.now(),
+      updated_at: new Date().toISOString(),
     };
 
     await db('categories').where({ id }).update(updatePayload);

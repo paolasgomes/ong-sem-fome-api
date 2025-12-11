@@ -137,7 +137,10 @@ const createDistribution = async (req: Request, res: Response) => {
 
               await trx('products')
                 .where({ id: item.product_id })
-                .update({ in_stock: updatedStock, updated_at: trx.fn.now() });
+                .update({
+                  in_stock: updatedStock,
+                  updated_at: new Date().toISOString(),
+                });
             } else {
               throw new Error(
                 `Produto com ID ${item.product_id} não encontrado`,

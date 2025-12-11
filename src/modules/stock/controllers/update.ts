@@ -80,7 +80,7 @@ const updateStock = async (req: Request, res: Response) => {
 
     await db('products')
       .where({ id: productId })
-      .update({ in_stock: updatedStock, updated_at: db.fn.now() });
+      .update({ in_stock: updatedStock, updated_at: new Date().toISOString() });
 
     return res.status(200).json({
       message: 'Estoque atualizado com sucesso',

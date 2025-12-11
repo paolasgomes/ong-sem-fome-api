@@ -98,7 +98,6 @@ const getByIdFoodBaskets = async (req: Request, res: Response) => {
 
     return res.json({
       ...basket,
-      is_active: Boolean(basket.is_active),
       items: detailedItems,
     });
   } catch (error) {

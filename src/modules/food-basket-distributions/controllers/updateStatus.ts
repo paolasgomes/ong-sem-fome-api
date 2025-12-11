@@ -67,7 +67,7 @@ const updateStatus = async (req: Request, res: Response) => {
 
     await db('food_basket_distributions')
       .where({ id: distributionId })
-      .update({ status, updated_at: db.fn.now() });
+      .update({ status, updated_at: new Date().toISOString() });
 
     return res.status(200).json({
       message: 'Status da distribuição atualizado com sucesso',

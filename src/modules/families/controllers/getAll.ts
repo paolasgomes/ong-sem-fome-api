@@ -62,13 +62,8 @@ const getAllFamilies = async (req: Request, res: Response) => {
 
     const totalPages = result.pagination.lastPage || 1;
 
-    const formattedData = result.data.map((family) => ({
-      ...family,
-      is_active: family.is_active === 1,
-    }));
-
     return res.json({
-      results: formattedData,
+      results: result.data,
       page: result.pagination.currentPage,
       limit: result.pagination.perPage,
       total: result.pagination.total,
